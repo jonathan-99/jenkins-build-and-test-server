@@ -1,0 +1,20 @@
+# docker network create jenkins
+
+docker run \
+    --name jenkins-docker \
+    --detach \
+    --privileged \
+    --network jenkins \
+    --network-alias docker \
+    --env DOCKER_TLS_CERTDIR=/certs
+    --volume jenkins-docker-certs:/cert/client \
+    --volume jenkins-data:/mnt/jenkins_home \
+    --publish 2376:2376 \
+    docker:dind
+    --storage-driver overlay2
+
+
+docker build -t myjenkins-blueocean:2.53-alpine .
+
+# admin password retrieval
+sudo docker exec ${CONTAINER_ID} cat /var/lib/jenkins/secrets/initialAdminPassword
